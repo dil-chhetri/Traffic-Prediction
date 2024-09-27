@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Traffic Prediction</title>
+</head>
+<body>
+    <h2>Traffic Prediction</h2>
+    <form action="/predict" method="post">
+        <label for="junction">Select Junction:</label>
+        <select name="junction" id="junction">
+            <option value="1">Junction 1</option>
+            <option value="2">Junction 2</option>
+            <option value="3">Junction 3</option>
+            <option value="4">Junction 4</option>
+        </select><br>
+
+                <label for="junction">Select Models Algorithm:</label>
+        <select name="models" id="models">
+            <option value="1">Randon Forest Regression (Optimal)</option>
+            <option value="2">Linear Regression (Least)</option>
+            <option value="3">Decision Tree Regressor (Moderate)</option>
+
+        </select><br>
+
+    <label for="temperature">Temperature:</label>
+    <input type="text" id="temperature" name="temperature">
+
+    <label for="weather">Weather:</label>
+    <input type="text" id="weather" name="weather">
+
+    <label for="zone">Zone:</label>
+    <input type="text" id="zone" name="zone">
+
+    <!-- Add missing features here -->
+    <label for="time">Time (HH:MM):</label>
+    <input type="text" id="time" name="time">
+
+    <label for="day">Day:</label>
+    <input type="text" id="day" name="day">
+
+    <input type="submit" value="Predict">
+    </form>
+
+    {% if prediction_text %}
+    <div class="container">
+        <div class="graph-container">
+            <h3>{{ prediction_text }}</h3>
+            <h4>{{ traffic_condition_text }}</h4>
+            <h4>{{ model_type }}</h4>
+            <img src="{{ graph_url }}" alt="Traffic Graph">
+        </div>
+
+        <div class="conditions-container">
+            <h3>Hourly Traffic Conditions</h3>
+            <p>{{ hourly_conditions_text }}</p>
+
+            <h3>Significant Traffic Changes</h3>
+            <p>{{ significant_changes_text }}</p>
+        </div>
+    </div>
+    {% endif %}
+
+</body>
+</html>
