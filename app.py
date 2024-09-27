@@ -91,6 +91,11 @@ def predict():
     significant_changes = []  # To store times of significant traffic changes
     traffic_condition_per_hour = {}  # To store condition for each hour
 
+    # Initialize counters for traffic conditions
+    light_traffic_count = 0
+    normal_traffic_count = 0
+    heavy_traffic_count = 0
+
     previous_condition = None
     for hour in time_intervals:
         time_decimal = hour + 0 / 60.0  # No minutes, just the hour as decimal
@@ -133,10 +138,13 @@ def predict():
         # Determine traffic condition for this hour
         if predicted_value > 15:
             current_condition = "Heavy Traffic"
+            heavy_traffic_count += 1
         elif 5 <= predicted_value <= 15:
             current_condition = "Normal Traffic"
+            normal_traffic_count += 1
         else:
             current_condition = "Light Traffic"
+            light_traffic_count += 1
 
         traffic_conditions.append(current_condition)
         traffic_condition_per_hour[hour] = current_condition  # Store condition for this hour
@@ -186,11 +194,15 @@ def predict():
     # Determine traffic condition for the current time
     if current_predicted_value > 15:
         current_traffic_condition = "Heavy Traffic"
+        traffic_gif_url = 'https://j.gifs.com/yEZ549.gif'
     elif 5 <= current_predicted_value <= 15:
         current_traffic_condition = "Normal Traffic"
+        traffic_gif_url = 'https://i.pinimg.com/originals/89/a7/c1/89a7c103906549e860451f1b32ea0a0c.gif'
     else:
         current_traffic_condition = "Light Traffic"
+        traffic_gif_url = 'https://cdn.secura.net/dims4/default/36a7cdd/2147483647/strip/true/crop/1024x410+0+0/resize/800x320!/quality/90/?url=https%3A%2F%2Fk2-prod-secura.s3.us-east-1.amazonaws.com%2Fbrightspot%2Fa0%2F56%2Fb14e48eebdd756e1bcfa861dace9%2Ffleet-intersection-main.jpg'
 
+    # Identify the model type
     if model_algorithm == '1':
         model = "Random Forest Regressor"
     elif model_algorithm == '2':
@@ -198,14 +210,8 @@ def predict():
     else:
         model = "Decision Tree Regressor"
 
-    if junction == '1':
-        junction_name = "Junction 1"
-    elif junction == '2':
-        junction_name = "Junction 2"
-    elif junction == '3':
-        junction_name = "Junction 3"
-    elif junction == '4':
-        junction_name = "Junction 4"
+    # Junction name
+    junction_name = f"Junction {junction}"
 
     # Generate the plot for traffic throughout the day with significant changes
     img = io.BytesIO()
@@ -216,19 +222,28 @@ def predict():
     for hour, condition in significant_changes:
         plt.axvline(x=hour, color='red', linestyle='--', label=f'Traffic change to {condition} at {hour}:00')
 
-    # Annotate traffic conditions at each hour on the graph
-    # for hour, condition in traffic_condition_per_hour.items():
-    #     plt.text(hour, traffic_predictions[hour] + 0.5, condition, ha='center', fontsize=8)
-
     plt.xticks(time_intervals)  # Show every hour on the x-axis
     plt.xlabel('Time of Day (Hour)')
     plt.ylabel('Predicted Traffic')
-    plt.title(f'Predicted Traffic Throughout the Day with Traffic Conditions with {model} at {junction_name}')
+    plt.title(f'Predicted Traffic Throughout the Day with {model} at {junction_name}')
     plt.grid(True)
     plt.legend(loc='lower right')
     plt.savefig(img, format='png')
     img.seek(0)
     graph_url = base64.b64encode(img.getvalue()).decode()
+
+    # Bar graph for traffic conditions
+    bar_img = io.BytesIO()
+    plt.figure(figsize=(8, 4))
+    conditions = ['Light Traffic', 'Normal Traffic', 'Heavy Traffic']
+    counts = [light_traffic_count, normal_traffic_count, heavy_traffic_count]
+    plt.bar(conditions, counts, color=['green', 'orange', 'red'])
+    plt.xlabel('Traffic Conditions')
+    plt.ylabel('Occurrences')
+    plt.title('Occurrences of Traffic Conditions Throughout the Day')
+    plt.savefig(bar_img, format='png')
+    bar_img.seek(0)
+    bargraph_url = base64.b64encode(bar_img.getvalue()).decode()
 
     # Render the HTML template with the current prediction, hourly traffic conditions, and graph
     hourly_conditions = ", ".join(
@@ -240,9 +255,12 @@ def predict():
         traffic_condition_text=f'Condition at {time_str}: {current_traffic_condition}',
         hourly_conditions_text=f'Hourly Traffic Conditions: {hourly_conditions}',
         graph_url=f'data:image/png;base64,{graph_url}',
+        bargraph_url=f'data:image/png;base64,{bargraph_url}',
         model_type=f'Model used for prediction: {model}',
         significant_changes_text=f'Significant traffic changes: {", ".join([f"{h}:00 to {c}" for h, c in significant_changes])}',
+        traffic_gif_url = traffic_gif_url,
     )
+
 
 if __name__ == "__main__":
     app.run(debug=True)
