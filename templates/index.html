@@ -105,7 +105,7 @@
     <div class="container">
         <h1> YellowLight Traffic Prediction System</h1>
 
-        <form action="/predict" method="POST">
+                    <form action="/predict" method="POST">
             <label for="models">Model:</label>
             <select name="models" id="models" required>
                 <option value="1">Random Forest Regressor</option>
@@ -121,14 +121,11 @@
                 <option value="4">Junction 4</option>
             </select><br>
 
-            <label for="temperature">Temperature (°C):</label>
-            <input type="number" step="0.1" id="temperature" name="temperature" required><br>
+            <label for="date">Date (1-31):</label>
+            <input type="number" id="date" name="date" min="1" max="31" required><br>
 
-            <label for="weather">Weather Condition (0-1):</label>
-            <input type="number" step="0.01" id="weather" name="weather" required><br>
-
-            <label for="zone">Zone (1-4):</label>
-            <input type="number" id="zone" name="zone" min="1" max="4" required><br>
+            <label for="day">Month (1-12):</label>
+            <input type="number" id="month" name="month" min="1" max="12" required><br>
 
             <label for="day">Day (0-6):</label>
             <input type="number" id="day" name="day" min="0" max="6" required><br>

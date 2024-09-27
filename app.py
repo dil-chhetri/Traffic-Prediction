@@ -72,9 +72,9 @@ def home():
 def predict():
     model_algorithm = request.form.get('models')
     junction = request.form.get('junction')
-    temperature = float(request.form.get('temperature'))
-    weather = float(request.form.get('weather'))
-    zone = int(request.form.get('zone'))
+    date = int(request.form.get('date'))
+    month = int(request.form.get('month'))
+    zone = int(request.form.get('junction'))
     day = float(request.form.get('day'))
 
     # Convert current time to decimal hours
@@ -101,7 +101,7 @@ def predict():
         time_decimal = hour + 0 / 60.0  # No minutes, just the hour as decimal
 
         # Features for each hour prediction
-        features = np.array([[temperature, weather, zone, time_decimal, day]])
+        features = np.array([[date, month, zone, time_decimal, day]])
 
         # Select the model based on the algorithm and junction
         if model_algorithm == '1':  # Random Forest
@@ -160,7 +160,7 @@ def predict():
         significant_changes.append((23, traffic_conditions[-1]))
 
     # Get prediction for the current time (input by the user)
-    current_features = np.array([[temperature, weather, zone, current_time_decimal, day]])
+    current_features = np.array([[date, month, zone, current_time_decimal, day]])
     if model_algorithm == '1':  # Random Forest
         if junction == '1':
             current_prediction = model1.predict(current_features)
@@ -170,6 +170,7 @@ def predict():
             current_prediction = model3.predict(current_features)
         else:
             current_prediction = model4.predict(current_features)
+
     elif model_algorithm == '2':  # Linear Regression
         if junction == '1':
             current_prediction = model5.predict(current_features)
@@ -179,6 +180,7 @@ def predict():
             current_prediction = model7.predict(current_features)
         else:
             current_prediction = model8.predict(current_features)
+
     elif model_algorithm == '3':  # Decision Tree
         if junction == '1':
             current_prediction = model9.predict(current_features)
@@ -213,16 +215,16 @@ def predict():
     # Junction name
     junction_name = f"Junction {junction}"
 
-    # Generate the plot for traffic throughout the day with significant changes
+
     img = io.BytesIO()
     plt.figure(figsize=(10, 6))
     plt.plot(time_intervals, traffic_predictions, marker='o', linestyle='-', color='blue')
 
-    # Highlight the significant changes in traffic condition
+
     for hour, condition in significant_changes:
         plt.axvline(x=hour, color='red', linestyle='--', label=f'Traffic change to {condition} at {hour}:00')
 
-    plt.xticks(time_intervals)  # Show every hour on the x-axis
+    plt.xticks(time_intervals)
     plt.xlabel('Time of Day (Hour)')
     plt.ylabel('Predicted Traffic')
     plt.title(f'Predicted Traffic Throughout the Day with {model} at {junction_name}')
