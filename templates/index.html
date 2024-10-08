@@ -3,162 +3,158 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Traffic Prediction System</title>
+    <title>YellowLight Traffic Prediction System</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <style>
         body {
-            font-family: Arial, sans-serif;
-            margin: 20px;
-            background-color: #f4f4f4;
+            background-color: #121212;
+            color: #e0e0e0;
+            transition: background-color 0.3s, color 0.3s;
         }
-        .container {
-            max-width: 800px;
-            margin: 0 auto;
-
-            padding: 20px;
+        .container-custom {
+            margin-top: 40px;
+            background-color: #1e1e1e;
+            padding: 30px;
             border-radius: 8px;
-            /*box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);*/
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            transition: background-color 0.3s;
         }
-        h1 {
-            text-align: center;
-            color: #333;
+        .navbar-dark-mode {
+            background-color: #333;
         }
-        form {
-            margin-bottom: 20px;
-        }
-        label {
-            display: inline-block;
-            width: 160px;
+        .form-label {
             font-weight: bold;
+            color: #e0e0e0;
         }
-        input[type="text"], input[type="number"], select {
-            padding: 10px;
-            margin-bottom: 10px;
-            width: calc(100% - 180px);
-            border: 1px solid #ccc;
-            border-radius: 4px;
-        }
-        button {
-            padding: 10px 20px;
-            background-color: #4CAF50;
-            color: white;
-            border: none;
-            cursor: pointer;
-            border-radius: 4px;
-            font-size: 16px;
-            margin-top: 10px;
-        }
-        button:hover {
-            background-color: #45a049;
-        }
-        .results {
-            margin-top: 20px;
+        .results, .graph-container {
             text-align: center;
-        }
-        .graph {
             margin-top: 20px;
-            text-align: center;
         }
-        img {
+        .graph-container img {
             max-width: 100%;
             height: auto;
         }
-        .prediction-text {
-            font-size: 1.5em;
-            color: #333;
+        .navbar-brand, .nav-link {
+            color: #e0e0e0 !important;
         }
-        .traffic-condition-text {
-            font-size: 1.2em;
-            color: #666;
+        .btn-primary {
+            background-color: #007bff;
+            border-color: #007bff;
         }
-        .hourly-conditions {
-            margin-top: 10px;
-            font-size: 1em;
-            color: #777;
+        .btn-primary:hover {
+            background-color: #0056b3;
+            border-color: #0056b3;
         }
-        .significant-changes {
-            margin-top: 10px;
-            font-size: 1em;
-            color: #ff5722;
-        }
-        h3 {
-            color: #444;
-        }
-        .graph-container {
-            margin-top: 20px;
-            text-align: center;
-        }
-        .conditions-container {
-            margin-top: 20px;
-            text-align: left;
-        }
-        p {
-            color: #555;
-        }
-
-        .image {
-            text-align: center;
+        .form-select, .form-control {
+            background-color: #333;
+            color: #fff;
+            border: 1px solid #444;
         }
     </style>
 </head>
 <body>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark navbar-dark-mode">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#">YellowLight Traffic</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    <li class="nav-item">
+                        <a class="nav-link" href="/">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/graphs">Graphs</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/summary">See results</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
 
-    <div class="container">
-        <h1> YellowLight Traffic Prediction System</h1>
+    <!-- Main Content -->
+    <div class="container container-custom">
+        <h1 class="text-center">YellowLight Traffic Prediction System</h1>
 
-                    <form action="/predict" method="POST">
-            <label for="models">Model:</label>
-            <select name="models" id="models" required>
-                <option value="1">Random Forest Regressor</option>
-                <option value="2">Linear Regression</option>
-                <option value="3">Decision Tree Regressor</option>
-            </select><br>
+        <!-- Form -->
+        <form action="/predict" method="POST" class="mt-4">
+            <div class="mb-3">
+                <label for="models" class="form-label">Model</label>
+                <select class="form-select" name="models" id="models" required>
+                    <option value="1">Random Forest Regressor</option>
+                    <option value="2">Linear Regression</option>
+                    <option value="3">Decision Tree Regressor</option>
+                </select>
+            </div>
 
-            <label for="junction">Junction:</label>
-            <select name="junction" id="junction" required>
-                <option value="1">Junction 1</option>
-                <option value="2">Junction 2</option>
-                <option value="3">Junction 3</option>
-                <option value="4">Junction 4</option>
-            </select><br>
+            <div class="mb-3">
+                <label for="junction" class="form-label">Junction</label>
+                <select class="form-select" name="junction" id="junction" required>
+                    <option value="1">Junction 1</option>
+                    <option value="2">Junction 2</option>
+                    <option value="3">Junction 3</option>
+                    <option value="4">Junction 4</option>
+                </select>
+            </div>
 
-            <label for="date">Date (1-31):</label>
-            <input type="number" id="date" name="date" min="1" max="31" required><br>
+            <div class="mb-3">
+                <label for="date" class="form-label">Date (1-31)</label>
+                <input type="number" class="form-control" id="date" name="date" min="1" max="31" required>
+            </div>
 
-            <label for="day">Month (1-12):</label>
-            <input type="number" id="month" name="month" min="1" max="12" required><br>
+            <div class="mb-3">
+                <label for="month" class="form-label">Month (1-12)</label>
+                <input type="number" class="form-control" id="month" name="month" min="1" max="12" required>
+            </div>
 
-            <label for="day">Day (0-6):</label>
-            <input type="number" id="day" name="day" min="0" max="6" required><br>
+            <div class="mb-3">
+                <label for="day" class="form-label">Day (0-6)</label>
+                <input type="number" class="form-control" id="day" name="day" min="0" max="6" required>
+            </div>
 
-            <label for="time">Time (HH:MM):</label>
-            <input type="text" id="time" name="time" placeholder="e.g., 08:30" required><br>
+            <div class="mb-3">
+                <label for="time" class="form-label">Time (HH:MM)</label>
+                <input type="text" class="form-control" id="time" name="time" placeholder="e.g., 08:30" required>
+            </div>
 
-            <button type="submit">Predict Traffic</button>
+            <button type="submit" class="btn btn-primary w-100">Predict Traffic</button>
         </form>
 
+        <!-- Results -->
         {% if prediction_text %}
-        <div class="results">
-            <div class="prediction-text">{{ prediction_text }}</div>
-            <div class="traffic-condition-text">{{ traffic_condition_text }}</div>
-            <div class="hourly-conditions">{{ hourly_conditions_text }}</div>
-            <div class="significant-changes">{{ significant_changes_text }}</div>
+        <div class="results mt-4">
+            <h2>Prediction Results</h2>
+            <p>{{ prediction_text }}</p>
+            <p class="fw-bold">{{ traffic_condition_text }}</p>
+            <p>{{ hourly_conditions_text }}</p>
+            <p class="text-danger">{{ significant_changes_text }}</p>
         </div>
-        <div class="image">
-            <h1>{{traffic_condition_text}}</h1>
-            <img src="{{ traffic_gif_url }}" alt="Traffic Condition GIF" class="traffic-gif">
+
+        <!-- Traffic Condition Image -->
+        <div class="graph-container mt-4">
+            <h3>Traffic Condition</h3>
+            <img src="{{ traffic_gif_url }}" alt="Traffic Condition GIF">
         </div>
-        <div class="graph">
-            <h3>{{model_type}}</h3>
+
+        <!-- Prediction Graph -->
+        <div class="graph-container mt-4">
+            <h3>{{ model_type }} Prediction Graph</h3>
             <img src="{{ graph_url }}" alt="Traffic Prediction Graph">
         </div>
 
-        <div class="graph">
-            <h3>{{model_type}}</h3>
-            <img src="{{ bargraph_url }}" alt="Traffic Prediction Graph">
+        <div class="graph-container mt-4">
+            <h3>{{ model_type }} Bar Graph</h3>
+            <img src="{{ bargraph_url }}" alt="Traffic Prediction Bar Graph">
         </div>
-
         {% endif %}
     </div>
 
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

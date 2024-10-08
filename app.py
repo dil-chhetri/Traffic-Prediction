@@ -2,10 +2,119 @@ from flask import Flask, request, render_template
 import pickle
 import numpy as np
 import matplotlib.pyplot as plt
+import pandas as pd
 import io
 import base64
+from sklearn.tree import DecisionTreeRegressor
+from sklearn.ensemble import RandomForestRegressor
+from sklearn.linear_model import LinearRegression
+from sklearn.metrics import mean_squared_error
+from sklearn.preprocessing import OneHotEncoder
 app = Flask(__name__)
 
+
+model_images = {
+    'Random Forest Regression': {
+        'junction_1': '/static/images/rfr_junc1.png',
+        'junction_2': '/static/images/rfr_junc2.png',
+        'junction_3': '/static/images/rfr_junc3.png',
+        'junction_4': '/static/images/rfr_junc4.png'
+    },
+    'Linear Regression': {
+        'junction_1': '/static/images/lr_junc1.png',
+        'junction_2': '/static/images/lr_junc2.png',
+        'junction_3': '/static/images/lr_junc3.png',
+        'junction_4': '/static/images/lr_junc4.png'
+    },
+    'Decision Tree Regressor': {
+        'junction_1': '/static/images/dtr_junc1.png',
+        'junction_2': '/static/images/dtr_junc2.png',
+        'junction_3': '/static/images/dtr_junc3.png',
+        'junction_4': '/static/images/dtr_junc4.png'
+    }
+}
+
+
+@app.route('/graphs', methods=['GET', 'POST'])
+def show_graphs():
+    # Default algorithm if none is selected
+    selected_algorithm = 'Random Forest Regression'
+
+    if request.method == 'POST':
+        selected_algorithm = request.form.get('algorithm')
+
+    # Fetch the appropriate images based on the selected algorithm
+    plot_filename_junction1 = model_images[selected_algorithm]['junction_1']
+    plot_filename_junction2 = model_images[selected_algorithm]['junction_2']
+    plot_filename_junction3 = model_images[selected_algorithm]['junction_3']
+    plot_filename_junction4 = model_images[selected_algorithm]['junction_4']
+
+    algorithms = list(model_images.keys())
+
+    return render_template(
+        'graph.html',
+        algorithms=algorithms,
+        selected_algorithm=selected_algorithm,
+        plot_filename_junction1=plot_filename_junction1,
+        plot_filename_junction2=plot_filename_junction2,
+        plot_filename_junction3=plot_filename_junction3,
+        plot_filename_junction4=plot_filename_junction4
+    )
+
+    # Data for each model and junction (Train Score, Test Score, RMSE)
+junction_data = {
+        "Junction 1": {
+            "DecisionTreeRegressor": {
+                "Train Score": 0.8760136747446263,
+                "Test Score": 0.8750423103000151,
+                "RMSE": 8.063584560348051
+            },
+            "LinearRegressor": {
+                "Train Score": 0.7069572473028425,
+                "Test Score": 0.6984381456389861,
+                "RMSE": 12.52664741751258
+            },
+            "RandomForestRegressor": {
+                "Train Score": 0.8794272263636089,
+                "Test Score": 0.878332160972062,
+                "RMSE": 7.95672866573454
+            }
+        },
+        'Junction 2': {
+            'DecisionTreeRegressor': {'Train Score': 0.8760, 'Test Score': 0.8750, 'RMSE': 8.06},
+            'LinearRegressor': {'Train Score': 0.7069, 'Test Score': 0.6984, 'RMSE': 12.52},
+            'RandomForestRegressor': {'Train Score': 0.8794, 'Test Score': 0.8783, 'RMSE': 7.95}
+        },
+        'Junction 3': {
+            'DecisionTreeRegressor': {'Train Score': 0.8167, 'Test Score': 0.8023, 'RMSE': 3.24},
+            'LinearRegressor': {'Train Score': 0.6067, 'Test Score': 0.5827, 'RMSE': 4.71},
+            'RandomForestRegressor': {'Train Score': 0.8292, 'Test Score': 0.8142, 'RMSE': 3.14}
+        },
+        'Junction 4': {
+            'DecisionTreeRegressor': {'Train Score': 0.3866, 'Test Score': 0.3535, 'RMSE': 8.27},
+            'LinearRegressor': {'Train Score': 0.2468, 'Test Score': 0.2413, 'RMSE': 8.96},
+            'RandomForestRegressor': {'Train Score': 0.4064, 'Test Score': 0.3828, 'RMSE': 8.08}
+        }
+    }
+
+
+@app.route('/summary')
+def summary():
+    summary_data = {}
+
+    # Calculate best, middle, and least performing models based on RMSE
+    for junction, models in junction_data.items():
+        # Sort models by RMSE
+        sorted_models = sorted(models.items(), key=lambda item: item[1]['RMSE'])
+
+        # Add sorted models to summary data
+        summary_data[junction] = {
+            "best": sorted_models[0],
+            "middle": sorted_models[1],
+            "least": sorted_models[2]
+        }
+
+    return render_template('summary.html', summary_data=summary_data)
 # Load all the models for the four junctions
 # Assuming models were saved as dictionaries
 with open('models/RF/final_model_1.pkl', 'rb') as f1:
@@ -136,10 +245,10 @@ def predict():
         traffic_predictions.append(predicted_value)
 
         # Determine traffic condition for this hour
-        if predicted_value > 15:
+        if predicted_value > 7:
             current_condition = "Heavy Traffic"
             heavy_traffic_count += 1
-        elif 5 <= predicted_value <= 15:
+        elif 5 <= predicted_value <= 7:
             current_condition = "Normal Traffic"
             normal_traffic_count += 1
         else:
