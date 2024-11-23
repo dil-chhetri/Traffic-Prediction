@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <title>YellowLight</title>
+    <meta
+      content="width=device-width, initial-scale=1.0, shrink-to-fit=no"
+      name="viewport"
+    />
+
+
+    <!-- Fonts and icons -->
+    <script src="../static/assets/js/plugin/webfont/webfont.min.js"></script>
+    <script>
+      WebFont.load({
+        google: { families: ["Public Sans:300,400,500,600,700"] },
+        custom: {
+          families: [
+            "Font Awesome 5 Solid",
+            "Font Awesome 5 Regular",
+            "Font Awesome 5 Brands",
+            "simple-line-icons",
+          ],
+          urls: ["../static/assets/css/fonts.min.css"],
+        },
+        active: function () {
+          sessionStorage.fonts = true;
+        },
+      });
+    </script>
+
+    <!-- CSS Files -->
+    <link rel="stylesheet" href="../static/assets/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="../static/assets/css/plugins.min.css" />
+    <link rel="stylesheet" href="../static/assets/css/kaiadmin.min.css" />
+
+
+    <link rel="stylesheet" href="../static/assets/css/demo.css" />
+  </head>
+  <body>
+    <div class="wrapper">
+      <!-- Sidebar -->
+            <div class="sidebar" data-background-color="dark">
+        <div class="sidebar-logo">
+          <div class="logo-header" data-background-color="dark">
+            <a href="/" class="logo">
+              <img
+                src="../static/assets/img/kaiadmin/logo_light.svg"
+                alt="navbar brand"
+                class="navbar-brand"
+                height="20"
+              />
+            </a>
+            <div class="nav-toggle">
+              <button class="btn btn-toggle toggle-sidebar">
+                <i class="gg-menu-right"></i>
+              </button>
+              <button class="btn btn-toggle sidenav-toggler">
+                <i class="gg-menu-left"></i>
+              </button>
+            </div>
+            <button class="topbar-toggler more">
+              <i class="gg-more-vertical-alt"></i>
+            </button>
+          </div>
+        </div>
+        <div class="sidebar-wrapper scrollbar scrollbar-inner">
+          <div class="sidebar-content">
+            <ul class="nav nav-secondary">
+              <li class="nav-item mb-3">
+                <a href="/predictions" aria-expanded="false">
+                  <i class="fas fa-home"></i>
+                  <p>Results</p>
+                </a>
+              </li>
+              <li class="nav-item active mb-3">
+                <a href="/predict" aria-expanded="false">
+                  <i class="fas fa-search"></i>
+                  <p>Predict</p>
+                </a>
+              </li>
+              <li class="nav-item mb-3 ">
+                <a href="/history" aria-expanded="false">
+                  <i class="fas fa-history"></i>
+                  <p>Prediction History</p>
+                </a>
+              </li>
+              <li class="nav-item mb-3">
+                <a href="/graphs" aria-expanded="false">
+                  <i class="fas fa-chart-line"></i>
+                  <p>Actual vs Predictions</p>
+                </a>
+              </li>
+              <li class="nav-item mb-3">
+                <a href="/summary" aria-expanded="false">
+                  <i class="fas fa-percentage"></i>
+                  <p>Accuracy Scores</p>
+                </a>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- End Sidebar -->
+
+      <div class="main-panel">
+
+          <div class="page-inner">
+              <div class="row">
+              <div class="col-md-12">
+                <div class="card">
+                  <div class="card-header">
+                    <div class="card-title">Input parameters</div>
+                  </div>
+                  <div class="card-body">
+                    <div class="row">
+                      <div class="col-md-12 col-lg-12">
+                          <form action="/predictions" method="POST" class="mt-4">
+                        <div class="form-group">
+                          <label for="model">Model</label>
+                        <select
+                            class="form-select"
+                            id="model"
+                            name="models"
+                            required
+                        >
+                                <option value="1">Random Forest Regressor</option>
+                                <option value="2">Linear Regression</option>
+                                <option value="3">Decision Tree Regressor</option>
+                          </select>
+                          <small id="modelInfo" class="form-text text-muted"
+                            >Select a model for prediction.</small
+                          >
+                        </div>
+
+                          <div class="form-group">
+                          <label for="model">Model</label>
+                        <select
+                            class="form-select"
+                            id="junction"
+                            name="junction"
+                            required
+                        >
+                            <option value="1">Junction 1</option>
+                            <option value="2">Junction 2</option>
+                            <option value="3">Junction 3</option>
+                            <option value="4">Junction 4</option>
+                          </select>
+                          <small id="junctionInfo" class="form-text text-muted"
+                            >Select a model for prediction.</small
+                          >
+                        </div>
+
+                           <div class="form-group">
+                              <label for="date">Date:</label>
+                              <input
+                                type="number"
+                                class="form-control"
+                                id="date"
+                                placeholder="Enter date"
+                                name="date"
+                                min="1"
+                                max="31" required
+                              />
+                        </div>
+                            <div class="form-group">
+                          <label for="month">Model</label>
+                        <select
+                            class="form-select"
+                            id="month"
+                            name="month"
+                            required
+                        >
+                            <option value="1">January</option>
+                            <option value="2">February</option>
+                            <option value="3">March</option>
+                            <option value="4">April</option>
+                            <option value="5">May</option>
+                            <option value="6">June</option>
+                            <option value="7">July</option>
+                            <option value="8">August</option>
+                            <option value="9">September</option>
+                            <option value="10">October</option>
+                            <option value="11">November</option>
+                            <option value="12">December</option>
+                          </select>
+                        </div>
+                                 <div class="form-group">
+                          <label for="day">Day</label>
+                        <select
+                            class="form-select"
+                            id="day"
+                            name="day"
+                            required
+                        >
+                            <option value="0">Sunday</option>
+                            <option value="1">Monday</option>
+                            <option value="2">Tuesday</option>
+                            <option value="3">Wednesday</option>
+                            <option value="4">Thursday</option>
+                            <option value="5">Friday</option>
+                            <option value="6">Saturday</option>
+                          </select>
+                        </div>
+                              <div class="form-group">
+                              <label for="date">Time (HH:MM):</label>
+                              <input
+                                type="text"
+                                class="form-control"
+                                id="time"
+                                name="time"
+                                placeholder="e.g., 08:30"
+                                required
+                              />
+                        </div>
+                              <div class="form-group">
+                                    <button type="submit" class="btn btn-success">Predict Traffic</button>
+                             </div>
+
+                        </form>
+
+                      </div>
+
+                      </div>
+                    </div>
+                  </div>
+
+                </div>
+      </div>
+
+    </div>
+
+      </div>
+    </div>
+
+
+    <!--   Core JS Files   -->
+    <script src="../static/assets/js/core/jquery-3.7.1.min.js"></script>
+    <script src="../static/assets/js/core/popper.min.js"></script>
+    <script src="../static/assets/js/core/bootstrap.min.js"></script>
+
+    <!-- jQuery Scrollbar -->
+    <script src="../static/assets/js/plugin/jquery-scrollbar/jquery.scrollbar.min.js"></script>
+
+
+    <script src="../static/assets/js/plugin/chart.js/chart.min.js"></script>
+
+
+    <script src="../static/assets/js/plugin/jquery.sparkline/jquery.sparkline.min.js"></script>
+
+    <!-- Chart Circle -->
+    <script src="../static/assets/js/plugin/chart-circle/circles.min.js"></script>
+
+    <!-- Datatables -->
+    <script src="../static/assets/js/plugin/datatables/datatables.min.js"></script>
+
+
+    <!-- jQuery Vector Maps -->
+    <script src="../static/assets/js/plugin/jsvectormap/jsvectormap.min.js"></script>
+    <script src="../static/assets/js/plugin/jsvectormap/world.js"></script>
+
+    <!-- Sweet Alert -->
+    <script src="../static/assets/js/plugin/sweetalert/sweetalert.min.js"></script>
+
+
+    <script src="../static/assets/js/kaiadmin.min.js"></script>
+
+    <script src="../static/assets/js/setting-demo.js"></script>
+    <script src="../static/assets/js/demo.js"></script>
+
+
+  </body>
+</html>

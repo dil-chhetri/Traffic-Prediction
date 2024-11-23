@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <title>YellowLight</title>
+    <meta
+      content="width=device-width, initial-scale=1.0, shrink-to-fit=no"
+      name="viewport"
+    />
+
+    <!-- Fonts and icons -->
+    <script src="../static/assets/js/plugin/webfont/webfont.min.js"></script>
+    <script>
+      WebFont.load({
+        google: { families: ["Public Sans:300,400,500,600,700"] },
+        custom: {
+          families: [
+            "Font Awesome 5 Solid",
+            "Font Awesome 5 Regular",
+            "Font Awesome 5 Brands",
+            "simple-line-icons",
+          ],
+          urls: ["../static/assets/css/fonts.min.css"],
+        },
+        active: function () {
+          sessionStorage.fonts = true;
+        },
+      });
+    </script>
+
+    <!-- CSS Files -->
+    <link rel="stylesheet" href="../static/assets/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="../static/assets/css/plugins.min.css" />
+    <link rel="stylesheet" href="../static/assets/css/kaiadmin.min.css" />
+    <link rel="stylesheet" href="../static/assets/css/demo.css" />
+    <style>
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 20px;
+      }
+      th, td {
+        padding: 10px;
+        text-align: center;
+        border: 1px solid #ddd;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="wrapper">
+      <!-- Sidebar -->
+            <div class="sidebar" data-background-color="dark">
+        <div class="sidebar-logo">
+          <div class="logo-header" data-background-color="dark">
+            <a href="/" class="logo">
+              <img
+                src="../static/assets/img/kaiadmin/logo_light.svg"
+                alt="navbar brand"
+                class="navbar-brand"
+                height="20"
+              />
+            </a>
+            <div class="nav-toggle">
+              <button class="btn btn-toggle toggle-sidebar">
+                <i class="gg-menu-right"></i>
+              </button>
+              <button class="btn btn-toggle sidenav-toggler">
+                <i class="gg-menu-left"></i>
+              </button>
+            </div>
+            <button class="topbar-toggler more">
+              <i class="gg-more-vertical-alt"></i>
+            </button>
+          </div>
+        </div>
+        <div class="sidebar-wrapper scrollbar scrollbar-inner">
+          <div class="sidebar-content">
+            <ul class="nav nav-secondary">
+              <li class="nav-item mb-3">
+                <a href="/predictions" aria-expanded="false">
+                  <i class="fas fa-home"></i>
+                  <p>Results</p>
+                </a>
+              </li>
+              <li class="nav-item mb-3">
+                <a href="/predict" aria-expanded="false">
+                  <i class="fas fa-search"></i>
+                  <p>Predict</p>
+                </a>
+              </li>
+              <li class="nav-item mb-3 ">
+                <a href="/history" aria-expanded="false">
+                  <i class="fas fa-history"></i>
+                  <p>Prediction History</p>
+                </a>
+              </li>
+              <li class="nav-item mb-3">
+                <a href="/graphs" aria-expanded="false">
+                  <i class="fas fa-chart-line"></i>
+                  <p>Actual vs Predictions</p>
+                </a>
+              </li>
+              <li class="nav-item mb-3 active">
+                <a href="/summary" aria-expanded="false">
+                  <i class="fas fa-percentage"></i>
+                  <p>Accuracy Scores</p>
+                </a>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- End Sidebar -->
+
+      <div class="main-panel">
+          <div class="page-inner">
+            <div class="row">
+              <div class="col-md-12">
+                <div class="card card-round">
+                  <div class="card-header">
+                    <div class="card-head-row card-tools-still-right">
+                      <h4 class="card-title">Model Performance Summary</h4>
+                    </div>
+                    <p class="card-category">Performance comparison across junctions</p>
+                  </div>
+                  <div class="card-body">
+                    <div>
+                      <table>
+                        <thead>
+                          <tr>
+                            <th>Junction</th>
+                            <th>Algorithm</th>
+                            <th>Train Score</th>
+                            <th>Test Score</th>
+                            <th>RMSE</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {% for junction, model_data in summary_data.items() %}
+                            <tr>
+                              <td rowspan="3">{{ junction }}</td>
+                              <td>{{ model_data.best[0] }}</td>
+                              <td>{{ model_data.best[1]['Train Score'] }}</td>
+                              <td>{{ model_data.best[1]['Test Score'] }}</td>
+                              <td>{{ model_data.best[1]['RMSE'] }}</td>
+                            </tr>
+                            <tr>
+                              <td>{{ model_data.middle[0] }}</td>
+                              <td>{{ model_data.middle[1]['Train Score'] }}</td>
+                              <td>{{ model_data.middle[1]['Test Score'] }}</td>
+                              <td>{{ model_data.middle[1]['RMSE'] }}</td>
+                            </tr>
+                            <tr>
+                              <td>{{ model_data.least[0] }}</td>
+                              <td>{{ model_data.least[1]['Train Score'] }}</td>
+                              <td>{{ model_data.least[1]['Test Score'] }}</td>
+                              <td>{{ model_data.least[1]['RMSE'] }}</td>
+                            </tr>
+                          {% endfor %}
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+      </div>
+    </div>
+
+    <!-- Core JS Files -->
+    <script src="../static/assets/js/core/jquery-3.7.1.min.js"></script>
+    <script src="../static/assets/js/core/popper.min.js"></script>
+    <script src="../static/assets/js/core/bootstrap.min.js"></script>
+  </body>
+</html>

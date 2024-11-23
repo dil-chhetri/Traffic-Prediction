@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <title>YellowLight</title>
+    <meta content="width=device-width, initial-scale=1.0, shrink-to-fit=no" name="viewport" />
+
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css?family=Varela+Round|Nunito:200,300,400,600,700&display=swap" rel="stylesheet" />
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" />
+
+    <style>
+      /* Full-screen background */
+      body, html {
+        height: 100%;
+        margin: 0;
+        font-family: 'Nunito', sans-serif;
+      }
+
+      .bg-image {
+        background-image: url('../static/images/bg.webp'); /* Replace with your image path */
+        background-size: cover;
+        background-position: center;
+        height: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+
+      .landing-content {
+        text-align: center;
+        color: white;
+        background-color: rgba(0, 0, 0, 0.8); /* Dark overlay for readability */
+        padding: 30px;
+        border-radius: 10px;
+      }
+
+      .landing-title {
+        font-size: 3rem;
+        font-weight: 700;
+        margin-bottom: 20px;
+      }
+
+      .btn-primary {
+        font-size: 1.25rem;
+        padding: 10px 25px;
+        background-color: #f7c900;
+        border: none;
+        color: white;
+        border-radius: 5px;
+        text-decoration: none;
+      }
+
+      .btn-primary:hover {
+        background-color: #e0b400;
+      }
+    </style>
+  </head>
+  <body>
+
+    <div class="bg-image">
+      <div class="landing-content">
+        <h1 class="landing-title">YellowLight</h1>
+        <p>Traffic Prediction System</p>
+        <a href="/predict" class="btn btn-primary">Get Started</a>
+      </div>
+    </div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.2/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+  </body>
+</html>

@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <title>YellowLight</title>
+    <meta
+      content="width=device-width, initial-scale=1.0, shrink-to-fit=no"
+      name="viewport"
+    />
+
+
+    <!-- Fonts and icons -->
+    <script src="../static/assets/js/plugin/webfont/webfont.min.js"></script>
+    <script>
+      WebFont.load({
+        google: { families: ["Public Sans:300,400,500,600,700"] },
+        custom: {
+          families: [
+            "Font Awesome 5 Solid",
+            "Font Awesome 5 Regular",
+            "Font Awesome 5 Brands",
+            "simple-line-icons",
+          ],
+          urls: ["../static/assets/css/fonts.min.css"],
+        },
+        active: function () {
+          sessionStorage.fonts = true;
+        },
+      });
+    </script>
+
+    <!-- CSS Files -->
+    <link rel="stylesheet" href="../static/assets/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="../static/assets/css/plugins.min.css" />
+    <link rel="stylesheet" href="../static/assets/css/kaiadmin.min.css" />
+
+
+    <link rel="stylesheet" href="../static/assets/css/demo.css" />
+  </head>
+  <body>
+    <div class="wrapper">
+      <!-- Sidebar -->
+            <div class="sidebar" data-background-color="dark">
+        <div class="sidebar-logo">
+          <div class="logo-header" data-background-color="dark">
+            <a href="/" class="logo">
+              <img
+                src="../static/assets/img/kaiadmin/logo_light.svg"
+                alt="navbar brand"
+                class="navbar-brand"
+                height="20"
+              />
+            </a>
+            <div class="nav-toggle">
+              <button class="btn btn-toggle toggle-sidebar">
+                <i class="gg-menu-right"></i>
+              </button>
+              <button class="btn btn-toggle sidenav-toggler">
+                <i class="gg-menu-left"></i>
+              </button>
+            </div>
+            <button class="topbar-toggler more">
+              <i class="gg-more-vertical-alt"></i>
+            </button>
+          </div>
+        </div>
+        <div class="sidebar-wrapper scrollbar scrollbar-inner">
+          <div class="sidebar-content">
+            <ul class="nav nav-secondary">
+              <li class="nav-item active mb-3">
+                <a href="/predictions" aria-expanded="false">
+                  <i class="fas fa-home"></i>
+                  <p>Results</p>
+                </a>
+              </li>
+              <li class="nav-item mb-3">
+                <a href="/predict" aria-expanded="false">
+                  <i class="fas fa-search"></i>
+                  <p>Predict</p>
+                </a>
+              </li>
+              <li class="nav-item mb-3 ">
+                <a href="/history" aria-expanded="false">
+                  <i class="fas fa-history"></i>
+                  <p>Prediction History</p>
+                </a>
+              </li>
+              <li class="nav-item mb-3">
+                <a href="/graphs" aria-expanded="false">
+                  <i class="fas fa-chart-line"></i>
+                  <p>Actual vs Predictions</p>
+                </a>
+              </li>
+              <li class="nav-item mb-3">
+                <a href="/summary" aria-expanded="false">
+                  <i class="fas fa-percentage"></i>
+                  <p>Accuracy Scores</p>
+                </a>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- End Sidebar -->
+
+      <div class="main-panel">
+
+
+          <div class="page-inner">
+            <div
+              class="d-flex align-items-left align-items-md-center flex-column flex-md-row pb-4"
+            >
+              <div>
+                <h3 class="fw-bold mb-3">Predictions Results</h3>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-sm-6 col-md-3">
+                <div class="card card-stats card-round">
+                  <div class="card-body">
+                    <div class="row align-items-center">
+                      <div class="col-icon">
+                        <div
+                          class="icon-big text-center icon-primary bubble-shadow-small"
+                        >
+                          <i class="fas fa-clock"></i>
+                        </div>
+                      </div>
+                      <div class="col col-stats ms-3 ms-sm-0">
+                        <div class="numbers">
+                          <p class="card-category">Time</p>
+                          <h4 class="card-title">{{ time_text }} </h4>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-sm-6 col-md-3">
+                <div class="card card-stats card-round">
+                  <div class="card-body">
+                    <div class="row align-items-center">
+                      <div class="col-icon">
+                        <div
+                          class="icon-big text-center icon-info bubble-shadow-small"
+                        >
+                          <i class="fas fa-user-check"></i>
+                        </div>
+                      </div>
+                      <div class="col col-stats ms-3 ms-sm-0">
+                        <div class="numbers">
+                          <p class="card-category">Model</p>
+                          <h4 class="card-title">{{ model_type }}</h4>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-sm-6 col-md-3">
+                <div class="card card-stats card-round">
+                  <div class="card-body">
+                    <div class="row align-items-center">
+                      <div class="col-icon">
+                        <div
+                          class="icon-big text-center icon-success bubble-shadow-small"
+                        >
+                          <i class="fas fa-luggage-cart"></i>
+                        </div>
+                      </div>
+                      <div class="col col-stats ms-3 ms-sm-0">
+                        <div class="numbers">
+                          <p class="card-category">Traffic Conditions</p>
+                          <h4 class="card-title">{{ traffic_condition_text }}</h4>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-sm-6 col-md-3">
+                <div class="card card-stats card-round">
+                  <div class="card-body">
+                    <div class="row align-items-center">
+                      <div class="col-icon">
+                        <div
+                          class="icon-big text-center icon-secondary bubble-shadow-small"
+                        >
+                          <i class="far fa-check-circle"></i>
+                        </div>
+                      </div>
+                      <div class="col col-stats ms-3 ms-sm-0">
+                        <div class="numbers">
+                          <p class="card-category">Traffic</p>
+                          <h4 class="card-title">{{ prediction_text }}</h4>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-8">
+                <div class="card card-round">
+                    <div class="card-header">
+                        <div class="card-head-row">
+                            <div class="card-title">{{ model_type }} Prediction Graph</div>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="chart-container d-flex justify-content-center align-items-center" style="min-height: 375px; overflow: hidden; text-align: center;">
+                            <img src="{{ graph_url }}" alt="Traffic Prediction Graph" style="max-width: 100%; height: auto; object-fit: contain;">
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+              <div class="col-md-4">
+                <div class="card  card-round">
+                  <div class="card-header">
+                    <div class="card-head-row">
+                      <div class="card-title">Significant Changes</div>
+                    </div>
+                  </div>
+                  <div class="card-body pb-0">
+                    <table class="table table-hover">
+                      <thead>
+                        <tr>
+                          <th scope="col">Time</th>
+                          <th scope="col">Traffic Condition</th>
+                        </tr>
+                      </thead>
+                      <tbody id="significant-changes-table">
+
+                      </tbody>
+                    </table>
+                  </div>
+                  <span id="significant-changes-text" style="display:none;">{{ significant_changes_text }}</span>
+                </div>
+                <div class="card  card-round">
+                  <div class="card-header">
+                    <div class="card-head-row">
+                      <div class="card-title">Total Predicted Traffic </div>
+                    </div>
+                  </div>
+                  <div class="card-body pb-0 card-title">
+                    {{total_traffic }}
+                  </div>
+
+                </div>
+                <div class="card  card-round">
+                  <div class="card-header">
+                    <div class="card-head-row">
+                      <div class="card-title">Average Predicted Traffic Per Hour</div>
+                    </div>
+                  </div>
+                  <div class="card-body pb-0 card-title">
+                    {{average_traffic }}
+                  </div>
+
+                </div>
+
+
+              </div>
+
+            </div>
+            <div class="row">
+              <div class="col-md-12">
+                <div class="card card-round">
+                  <div class="card-header">
+                    <div class="card-head-row card-tools-still-right">
+                      <h4 class="card-title">Hourly Traffic Conditions</h4>
+
+                    </div>
+                    <p class="card-category">
+                      Traffic Conditions 24 hours span
+                    </p>
+                  </div>
+                  <div class="card-body">
+                    <div class="row">
+                      <div class="col-md-6">
+                        <div class="table-responsive table-hover table-sales" style="max-height: 400px; overflow-y: auto;">
+                          <table class="table">
+                              <thead>
+                              <tr>
+                                <th scope="col">Time</th>
+                                <th scope="col">Condition</th>
+                                <th scope="col">Traffic</th>
+                              </tr>
+                            </thead>
+                            <tbody>
+                             {% for row in hourly_conditions_table %}
+                                <tr>
+                                  <td>{{ row.time }}</td>
+                                  <td>{{ row.condition }}</td>
+                                  <td>{{ row.traffic }}</td>
+                                </tr>
+                                {% endfor %}
+
+                            </tbody>
+                          </table>
+                        </div>
+                      </div>
+                  <div class="col-md-6" style="display: flex; justify-content: center; align-items: center; height: 400px;">
+
+                      <img src="{{ bargraph_url }}" alt="Traffic Prediction Bar Graph" style="width: 100%; height: 100%; object-fit: contain;">
+
+                  </div>
+
+
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+          </div>
+
+
+      </div>
+
+    </div>
+
+<script>
+
+    const changesText = document.getElementById("significant-changes-text").textContent;
+
+
+    const changes = changesText
+        .replace("Significant traffic changes: ", "")
+        .split(", ")
+        .map(item => {
+            const [time, condition] = item.split(" to ");
+            return { time, condition };
+        });
+
+
+    const tableBody = document.getElementById("significant-changes-table");
+
+
+    changes.forEach(({ time, condition }) => {
+        const row = document.createElement("tr");
+
+
+        const timeCell = document.createElement("td");
+        timeCell.textContent = time;
+        row.appendChild(timeCell);
+
+
+        const conditionCell = document.createElement("td");
+        conditionCell.textContent = condition;
+        row.appendChild(conditionCell);
+
+
+        tableBody.appendChild(row);
+    });
+</script>
+    <!--   Core JS Files   -->
+    <script src="../static/assets/js/core/jquery-3.7.1.min.js"></script>
+    <script src="../static/assets/js/core/popper.min.js"></script>
+    <script src="../static/assets/js/core/bootstrap.min.js"></script>
+
+    <!-- jQuery Scrollbar -->
+    <script src="../static/assets/js/plugin/jquery-scrollbar/jquery.scrollbar.min.js"></script>
+
+
+    <script src="../static/assets/js/plugin/chart.js/chart.min.js"></script>
+
+
+    <script src="../static/assets/js/plugin/jquery.sparkline/jquery.sparkline.min.js"></script>
+
+    <!-- Chart Circle -->
+    <script src="../static/assets/js/plugin/chart-circle/circles.min.js"></script>
+
+    <!-- Datatables -->
+    <script src="../static/assets/js/plugin/datatables/datatables.min.js"></script>
+
+
+
+    <!-- jQuery Vector Maps -->
+    <script src="../static/assets/js/plugin/jsvectormap/jsvectormap.min.js"></script>
+    <script src="../static/assets/js/plugin/jsvectormap/world.js"></script>
+
+    <!-- Sweet Alert -->
+    <script src="../static/assets/js/plugin/sweetalert/sweetalert.min.js"></script>
+
+
+    <script src="../static/assets/js/kaiadmin.min.js"></script>
+
+    <script src="../static/assets/js/setting-demo.js"></script>
+    <script src="../static/assets/js/demo.js"></script>
+
+  </body>
+</html>
