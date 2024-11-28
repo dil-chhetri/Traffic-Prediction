@@ -6,6 +6,14 @@
   <component name="ChangeListManager">
     <list default="true" id="c7520018-f804-4193-85a3-bd6de750ed29" name="Changes" comment="dboperations">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Traffic Predictions.ipynb" beforeDir="false" afterPath="$PROJECT_DIR$/Traffic Predictions.ipynb" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/demograph.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/demograph.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/demosummary.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/demosummary.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/graph.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/history.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/history.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/predict.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/predict.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/prediction.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/prediction.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/summary.html" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -57,6 +65,36 @@
       <recent name="C:\Users\dolch\PycharmProjects\YellowLightPrediction" />
     </key>
   </component>
+  <component name="RunManager">
+    <configuration name="app" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <module name="YellowLightPrediction" />
+      <option name="ENV_FILES" value="" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/app.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Python.app" />
+      </list>
+    </recent_temporary>
+  </component>
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
@@ -81,6 +119,8 @@
       <workItem from="1732375666687" duration="5832000" />
       <workItem from="1732432324893" duration="8449000" />
       <workItem from="1732550191496" duration="1668000" />
+      <workItem from="1732713343499" duration="990000" />
+      <workItem from="1732723036592" duration="1386000" />
     </task>
     <task id="LOCAL-00001" summary="dboperations">
       <option name="closed" value="true" />

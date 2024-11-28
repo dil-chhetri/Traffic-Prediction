@@ -14,7 +14,7 @@ import mysql.connector
 
 # Database configuration
 db_config = {
-    'host': 'localhost',  # Change as per your database settings
+    'host': 'localhost',
     'user': 'root',
     'password': '',
     'database': 'trafficpredictions'
@@ -48,13 +48,13 @@ model_images = {
 
 @app.route('/graphs', methods=['GET', 'POST'])
 def show_graphs():
-    # Default algorithm if none is selected
+
     selected_algorithm = 'Random Forest Regression'
 
     if request.method == 'POST':
         selected_algorithm = request.form.get('algorithm')
 
-    # Fetch the appropriate images based on the selected algorithm
+
     plot_filename_junction1 = model_images[selected_algorithm]['junction_1']
     plot_filename_junction2 = model_images[selected_algorithm]['junction_2']
     plot_filename_junction3 = model_images[selected_algorithm]['junction_3']
@@ -72,7 +72,7 @@ def show_graphs():
         plot_filename_junction4=plot_filename_junction4
     )
 
-    # Data for each model and junction (Train Score, Test Score, RMSE)
+
 junction_data = {
         "Junction 1": {
             "DecisionTreeRegressor": {
@@ -113,12 +113,12 @@ junction_data = {
 def summary():
     summary_data = {}
 
-    # Calculate best, middle, and least performing models based on RMSE
+
     for junction, models in junction_data.items():
-        # Sort models by RMSE
+
         sorted_models = sorted(models.items(), key=lambda item: item[1]['RMSE'])
 
-        # Add sorted models to summary data
+
         summary_data[junction] = {
             "best": sorted_models[0],
             "middle": sorted_models[1],
@@ -126,8 +126,7 @@ def summary():
         }
 
     return render_template('demosummary.html', summary_data=summary_data)
-# Load all the models for the four junctions
-# Assuming models were saved as dictionaries
+
 with open('models/RF/final_model_1.pkl', 'rb') as f1:
     model1_data = pickle.load(f1)
     model1 = model1_data['model']
@@ -146,7 +145,7 @@ with open('models/RF/final_model_4.pkl', 'rb') as f4:
 
 
 
-#Linear Regression Algorithm
+
 with open('models/LR/linear_model_1.pkl', 'rb') as f1:
     model5_data = pickle.load(f1)
     model5 = model1_data['model']
@@ -163,7 +162,7 @@ with open('models/LR/linear_model_4.pkl', 'rb') as f4:
     model8_data = pickle.load(f4)
     model8 = model4_data['model']
 
-# Decion Tree Regression
+
 with open('models/DTR/decision_model_1.pkl', 'rb') as f1:
     model9_data = pickle.load(f1)
     model9 = model1_data['model']
@@ -181,7 +180,7 @@ with open('models/DTR/decision_model_4.pkl', 'rb') as f4:
     model12 = model4_data['model']
 
 
-# Define route for homepage
+
 @app.route('/')
 def home():
     return render_template('index.html')
@@ -192,7 +191,7 @@ def predict():
     return render_template('predict.html')
 
 
-# Define route for prediction
+
 @app.route('/predictions', methods=['POST'])
 def predictions():
     model_algorithm = request.form.get('models')
@@ -203,34 +202,34 @@ def predictions():
     day = float(request.form.get('day'))
     year = 2024
 
-    # Convert current time to decimal hours
+
     time_str = request.form.get('time')
     time_parts = time_str.split(':')
     hours = int(time_parts[0])
     minutes = int(time_parts[1])
     current_time_decimal = hours + minutes / 60.0
 
-    # Initialize lists to store time, traffic predictions, and traffic conditions
-    time_intervals = list(range(24))  # From 0:00 to 23:00
+
+    time_intervals = list(range(24))
     traffic_predictions = []
     traffic_conditions = []
-    significant_changes = []  # To store times of significant traffic changes
-    traffic_condition_per_hour = {}  # To store condition for each hour
+    significant_changes = []
+    traffic_condition_per_hour = {}
 
-    # Initialize counters for traffic conditions
+
     light_traffic_count = 0
     normal_traffic_count = 0
     heavy_traffic_count = 0
 
     previous_condition = None
     for hour in time_intervals:
-        time_decimal = hour + 0 / 60.0  # No minutes, just the hour as decimal
+        time_decimal = hour + 0 / 60.0
 
-        # Features for each hour prediction
+
         features = np.array([[date, month, zone, time_decimal, day]])
 
-        # Select the model based on the algorithm and junction
-        if model_algorithm == '1':  # Random Forest
+
+        if model_algorithm == '1':
             if junction == '1':
                 prediction = model1.predict(features)
             elif junction == '2':
@@ -239,7 +238,7 @@ def predictions():
                 prediction = model3.predict(features)
             else:
                 prediction = model4.predict(features)
-        elif model_algorithm == '2':  # Linear Regression
+        elif model_algorithm == '2':
             if junction == '1':
                 prediction = model5.predict(features)
             elif junction == '2':
@@ -248,7 +247,7 @@ def predictions():
                 prediction = model7.predict(features)
             else:
                 prediction = model8.predict(features)
-        elif model_algorithm == '3':  # Decision Tree
+        elif model_algorithm == '3':
             if junction == '1':
                 prediction = model9.predict(features)
             elif junction == '2':
@@ -261,7 +260,7 @@ def predictions():
         predicted_value = prediction[0]
         traffic_predictions.append(predicted_value)
 
-        # Determine traffic condition for this hour
+
         if predicted_value > 7:
             current_condition = "Heavy Traffic"
             heavy_traffic_count += 1
@@ -273,27 +272,27 @@ def predictions():
             light_traffic_count += 1
 
         traffic_conditions.append(current_condition)
-        traffic_condition_per_hour[hour] = current_condition  # Store condition for this hour
+        traffic_condition_per_hour[hour] = current_condition
 
-        # Track significant changes in traffic condition
+
         if previous_condition and current_condition != previous_condition:
             significant_changes.append((hour, current_condition))
 
         previous_condition = current_condition
 
-    # Handle the edge case of the last hour (23:00) to midnight transition
-    if traffic_conditions[-1] != traffic_conditions[0]:  # Check if last hour is different from start
+
+    if traffic_conditions[-1] != traffic_conditions[0]:
         significant_changes.append((23, traffic_conditions[-1]))
 
-    # Calculate total traffic prediction for the day
+
     total_traffic = sum(traffic_predictions)
 
-    # Calculate the average traffic prediction for the day
+
     average_traffic = total_traffic / len(time_intervals)
 
-    # Get prediction for the current time (input by the user)
+
     current_features = np.array([[date, month, zone, current_time_decimal, day]])
-    if model_algorithm == '1':  # Random Forest
+    if model_algorithm == '1':
         if junction == '1':
             current_prediction = model1.predict(current_features)
         elif junction == '2':
@@ -303,7 +302,7 @@ def predictions():
         else:
             current_prediction = model4.predict(current_features)
 
-    elif model_algorithm == '2':  # Linear Regression
+    elif model_algorithm == '2':
         if junction == '1':
             current_prediction = model5.predict(current_features)
         elif junction == '2':
@@ -313,7 +312,7 @@ def predictions():
         else:
             current_prediction = model8.predict(current_features)
 
-    elif model_algorithm == '3':  # Decision Tree
+    elif model_algorithm == '3':
         if junction == '1':
             current_prediction = model9.predict(current_features)
         elif junction == '2':
@@ -325,7 +324,7 @@ def predictions():
 
     current_predicted_value = current_prediction[0]
 
-    # Determine traffic condition for the current time
+
     if current_predicted_value > 7:
         current_traffic_condition = "Heavy"
         traffic_gif_url = 'https://j.gifs.com/yEZ549.gif'
@@ -336,7 +335,7 @@ def predictions():
         current_traffic_condition = "Light"
         traffic_gif_url = 'https://cdn.secura.net/dims4/default/36a7cdd/2147483647/strip/true/crop/1024x410+0+0/resize/800x320!/quality/90/?url=https%3A%2F%2Fk2-prod-secura.s3.us-east-1.amazonaws.com%2Fbrightspot%2Fa0%2F56%2Fb14e48eebdd756e1bcfa861dace9%2Ffleet-intersection-main.jpg'
 
-    # Identify the model type
+
     if model_algorithm == '1':
         model = "RF"
     elif model_algorithm == '2':
@@ -344,7 +343,7 @@ def predictions():
     else:
         model = "DTR"
 
-    # Junction name
+
     junction_name = f"Junction {junction}"
 
 
@@ -366,7 +365,7 @@ def predictions():
     img.seek(0)
     graph_url = base64.b64encode(img.getvalue()).decode()
 
-    # Bar graph for traffic conditions
+
     bar_img = io.BytesIO()
     plt.figure(figsize=(8, 4))
     conditions = ['Light Traffic', 'Normal Traffic', 'Heavy Traffic']
@@ -379,7 +378,7 @@ def predictions():
     bar_img.seek(0)
     bargraph_url = base64.b64encode(bar_img.getvalue()).decode()
 
-    # Render the HTML template with the current prediction, hourly traffic conditions, and graph
+
     hourly_conditions_table = [
     {"time": f"{hour}:00", "condition": condition, "traffic": f"{traffic_predictions[hour]:.2f}"}
     for hour, condition in traffic_condition_per_hour.items()
@@ -389,7 +388,7 @@ def predictions():
     db_connection = mysql.connector.connect(**db_config)
     cursor = db_connection.cursor()
     try:
-        # Insert query
+
         insert_query = """
                 INSERT INTO predictions (date, time, model_type, prediction, total_traffic, average_traffic)
                 VALUES (%s, %s, %s, %s, %s, %s)
@@ -402,7 +401,7 @@ def predictions():
             total_traffic,
             average_traffic
         ))
-        db_connection.commit()  # Commit the transaction
+        db_connection.commit()
     except Exception as e:
         print(f"Database insertion error: {e}")
     finally:
@@ -420,15 +419,15 @@ def predictions():
         model_type=f'{model}',
         significant_changes_text=f'Significant traffic changes: {", ".join([f"{h}:00 to {c}" for h, c in significant_changes])}',
         traffic_gif_url = traffic_gif_url,
-        total_traffic=f'{total_traffic:.2f}',  # Display total traffic
-        average_traffic=f'{average_traffic:.2f}'  # Display average traffic
+        total_traffic=f'{total_traffic:.2f}',
+        average_traffic=f'{average_traffic:.2f}'
     )
 
 @app.route('/predictions')
 def preHome():
 
     if 'prediction_made' not in session or not session['prediction_made']:
-        return redirect(url_for('predict'))  # Redirect to the prediction form
+        return redirect(url_for('predict'))
     return render_template('prediction.html')
 
 @app.route("/delete", methods=["POST"])
@@ -448,7 +447,7 @@ def history():
     db_connection = mysql.connector.connect(**db_config)
     cursor = db_connection.cursor()
 
-    # Fetch all records
+
     cursor.execute("SELECT * FROM predictions ORDER BY id DESC")
     history_data = cursor.fetchall()
     print(history_data)
